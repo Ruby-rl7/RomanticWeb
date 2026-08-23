@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You My Baby💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="hearts"></div>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="eyebrow">a little something for</div>
+  <h1>Divine Kabaka</h1>
+  <div class="envelope-wrap" id="envelopeWrap" role="button" tabindex="0" aria-label="Open the letter">
+    <div class="envelope" id="envelope">
+      <div class="letter-peek"></div>
+      <div class="env-body"></div>
+      <div class="env-flap"></div>
+      <div class="seal">♡</div>
+    </div>
+  </div>
+  <p class="hint">tap the envelope to open it</p>
+</section>
+
+<!-- ============ LETTER ============ -->
+<section id="letter">
+  <div class="paper">
+    <h2>Dear Elsa,</h2>
+    <div class="letter-body">So I made you a whole website because apparently a text message wasn't going to cut it. That's how much you mean to me.
+
+Every little thing about you makes ordinary days feel like something worth remembering. I made this small corner of the internet just for you — a place that's ours.
+
+I hope it makes you smile the way you make me smile, every single day.</div>
+    <div class="signoff">— Ruby Shima</div>
+    <button class="close-letter" id="closeLetter" aria-label="Close the letter">✕ close</button>
+  </div>
+</section>
+
+<!-- ============ COUNTDOWN ============ -->
+<section id="countdown">
+  <div class="section-title">
+    <span class="eyebrow">marking the days</span>
+    <h2>Counting down to your birthday</h2>
+  </div>
+  <div id="countdown-cards">
+    <div class="count-box"><div class="num" id="cd-days">--</div><div class="lbl">days</div></div>
+    <div class="count-box"><div class="num" id="cd-hours">--</div><div class="lbl">hours</div></div>
+    <div class="count-box"><div class="num" id="cd-mins">--</div><div class="lbl">mins</div></div>
+    <div class="count-box"><div class="num" id="cd-secs">--</div><div class="lbl">secs</div></div>
+  </div>
+  <p id="countdown-msg"></p>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section id="gallery">
+  <div class="section-title">
+    <span class="eyebrow">little moments</span>
+    <h2>Us, in pictures</h2>
+  </div>
+  <div class="gallery">
+    <div class="photo-slot"><img src="photos/us1.jpeg" alt=""></div>
+    <div class="photo-slot"><img src="photos/us2.jpeg" alt=""></div>
+    <div class="photo-slot"><img src="photos/us3.jpeg" alt=""></div>
+    <div class="photo-slot"><img src="photos/us5.jpeg" alt=""></div>
+    <div class="photo-slot"><img src="photos/us4.jpeg" alt=""></div>
+    <div class="photo-slot"><img src="photos/us6.jpeg" alt=""></div>
+  </div>
+</section>
+
+<!-- ============ REASONS ============ -->
+<section id="reasons">
+  <div class="section-title">
+    <span class="eyebrow">tap to flip</span>
+    <h2>Reasons I love you</h2>
+  </div>
+  <div class="reasons-grid" id="reasonsGrid"></div>
+</section>
+
+<footer>
+  <button class="music-toggle" id="musicToggle" aria-pressed="false">♪ play our song</button>
+  <p style="margin-top:1.2rem;">made with ♡ for Divine</p>
+  <audio id="bgMusic" loop>
+    <!-- Replace with your own song file, see README -->
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+</footer>
+
+<script>
+  // ---------- floating hearts ----------
+  const heartsContainer = document.getElementById('hearts');
+  const symbols = ['♡','♥'];
+  for(let i=0; i<18; i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.fontSize = (0.8 + Math.random()*1.4) + 'rem';
+    h.style.animationDuration = (10 + Math.random()*14) + 's';
+    h.style.animationDelay = (Math.random()*14) + 's';
+    heartsContainer.appendChild(h);
+  }
+
+  // ---------- envelope open / close ----------
+  const envelope = document.getElementById('envelope');
+  const envelopeWrap = document.getElementById('envelopeWrap');
+  const letterSection = document.getElementById('letter');
+  const closeLetterBtn = document.getElementById('closeLetter');
+  const heroSection = document.getElementById('hero');
+
+  function openEnvelope(){
+    envelope.classList.add('open');
+    setTimeout(()=>{
+      letterSection.classList.add('show');
+      letterSection.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 500);
+  }
+  function closeEnvelope(){
+    letterSection.classList.remove('show');
+    envelope.classList.remove('open');
+    heroSection.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  envelopeWrap.addEventListener('click', openEnvelope);
+  envelopeWrap.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openEnvelope(); }});
+  closeLetterBtn.addEventListener('click', closeEnvelope);
+
+  // ---------- countdown ----------
+  // EDIT this date to your anniversary / next date / any date you're counting down to
+  const targetDate = new Date('2026-09-25T00:00:00');
+  function updateCountdown(){
+    const now = new Date();
+    let diff = targetDate - now;
+    const msgEl = document.getElementById('countdown-msg');
+    if(diff <= 0){
+      document.getElementById('cd-days').textContent = '0';
+      document.getElementById('cd-hours').textContent = '0';
+      document.getElementById('cd-mins').textContent = '0';
+      document.getElementById('cd-secs').textContent = '0';
+      msgEl.textContent = "happy birthday 🎉";
+      return;
+    }
+    const d = Math.floor(diff/(1000*60*60*24));
+    const h = Math.floor((diff/(1000*60*60))%24);
+    const m = Math.floor((diff/(1000*60))%60);
+    const s = Math.floor((diff/1000)%60);
+    document.getElementById('cd-days').textContent = d;
+    document.getElementById('cd-hours').textContent = h;
+    document.getElementById('cd-mins').textContent = m;
+    document.getElementById('cd-secs').textContent = s;
+    msgEl.textContent = "can't wait ♡";
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ---------- reasons cards ----------
+  // Edit this list freely — any number of reasons works
+  const reasons = [
+    "your voicee", "how you remember tiny details",
+    "your terrible jokes", "the way you give me chocolates😋",
+    "your ambition in life", "how you help me get close to God",
+    "just.. you", "can't forget your thighs😭😂"
+  ];
+  const grid = document.getElementById('reasonsGrid');
+  reasons.forEach((r, i)=>{
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-front">#${i+1}</div>
+        <div class="flip-back">${r}</div>
+      </div>`;
+    card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+
+  // ---------- music toggle ----------
+  const musicBtn = document.getElementById('musicToggle');
+  const audio = document.getElementById('bgMusic');
+  let playing = false;
+  musicBtn.addEventListener('click', ()=>{
+    if(!playing){
+      audio.play().catch(()=>{ alert('Add your own song.mp3 file next to index.html — see README.'); });
+      musicBtn.textContent = '♪ pause';
+      musicBtn.setAttribute('aria-pressed','true');
+    } else {
+      audio.pause();
+      musicBtn.textContent = '♪ play our song';
+      musicBtn.setAttribute('aria-pressed','false');
+    }
+    playing = !playing;
+  });
+</script>
+</body>
+</html>
